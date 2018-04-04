@@ -1,0 +1,77 @@
+version: '3'
+services:
+
+  mongo:
+    image: mongo:3.7
+    container_name: mongo
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+      - MONGODB_USER=user
+      - MONGODB_PASS=pwd
+    volumes:
+      - /Users/johanwistrom/tmp/:/data/db
+    ports:
+      - 27017:27017
+
+  zk1:
+    image: zookeeper:3.5
+    container_name: zk1
+    ports:
+      - 2181:2181
+
+  zk2:
+    image: zookeeper:3.5
+    container_name: zk2
+    ports:
+      - 2182:2181
+
+  kafka1:
+    image: ches/kafka:0.10.2.1
+    container_name: kafka1
+    ports:
+      - 9072:9092
+    environment:
+      - ZOOKEEPER_CONNECTION_STRING=zk1:2181,zk2:2182
+      - KAFKA_BROKER_ID=0
+    depends_on:
+      - zk1
+      - zk2
+
+  kafka2:
+    image: ches/kafka:0.10.2.1
+    container_name: kafka2
+    ports:
+      - 9082:9092
+    environment:
+      - ZOOKEEPER_CONNECTION_STRING=zk1:2181,zk2:2182
+      - KAFKA_BROKER_ID=1
+    depends_on:
+      - zk1
+      - zk2
+
+  kafka3:
+    image: ches/kafka:0.10.2.1
+    container_name: kafka3
+    ports:
+      - 9092:9092
+    environment:
+      - ZOOKEEPER_CONNECTION_STRING=zk1:2181,zk2:2182
+      - KAFKA_BROKER_ID=2
+    depends_on:
+      - zk1
+      - zk2
+
+  kafka_manager:
+    image: sheepkiller/kafka-manager
+    container_name: kafka_manager
+    environment:
+      - APPLICATION_SECRET=letmein
+      - ZK_HOSTS=zk1:2181,zk2:2181
+    ports:
+      - 9000:9000
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
