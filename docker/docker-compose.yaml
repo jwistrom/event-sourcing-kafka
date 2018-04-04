@@ -6,7 +6,7 @@ services:
       context: "../."
       dockerfile: "/docker/Dockerfile"
 
-    image: "rex2gateway"
+    image: "application"
     ports:
       - "8080:8080"
       - "35731:35731" #Live reload

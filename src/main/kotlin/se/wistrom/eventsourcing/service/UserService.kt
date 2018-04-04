@@ -24,7 +24,7 @@ class UserServiceImpl @Autowired constructor(val userRepository: UserRepository)
     @PostConstruct
     fun test(){
         userRepository.deleteAll()
-        val u = User.new(name = "Johan")
+        val u = User.new(firstName = "Johan", lastName = "Wiström")
         save(u)
     }
 
