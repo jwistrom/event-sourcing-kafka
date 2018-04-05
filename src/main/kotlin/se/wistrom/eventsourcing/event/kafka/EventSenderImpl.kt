@@ -18,6 +18,7 @@ class EventSenderImpl @Autowired constructor(val kafkaTemplate: KafkaTemplate<St
         { throwable -> logger.warn(String.format("Failed to send payload [%s] of event type [%s]", event.payload, event.type), throwable) }
     }
 
+
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(this::class.java)
         private const val topic = "event"
