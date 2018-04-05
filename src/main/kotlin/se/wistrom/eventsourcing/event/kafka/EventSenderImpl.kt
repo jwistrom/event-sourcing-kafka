@@ -14,7 +14,7 @@ class EventSenderImpl @Autowired constructor(val kafkaTemplate: KafkaTemplate<St
     override fun send(event: Event) {
         logger.info("Sending event of type {} and payload='{}'. Initiated by {}", event.type, event.payload, event.userId)
         val sendResult = kafkaTemplate.send(topic, event)
-        sendResult.addCallback({ result -> logger.info("Successfully sent event of type {} and payload='{}'. Initiated by {}. Offset: {}", event.type, event.payload, event.userId, result?.recordMetadata?.offset()?: 0) })
+        sendResult.addCallback({ result -> logger.info("Successfully sent event of type {} and payload='{}'. Initiated by {}. Offset: {}", event.type, event.payload, event.userId, result?.recordMetadata?.offset()?: -1) })
         { throwable -> logger.warn(String.format("Failed to send payload [%s] of event type [%s]", event.payload, event.type), throwable) }
     }
 

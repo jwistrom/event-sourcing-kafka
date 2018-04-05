@@ -7,15 +7,11 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 @Document
-class User private constructor(@Id val id: String, val firstName: String, val lastName: String) {
+class User (@Id val id: String = UUID.randomUUID().toString(), val firstName: String, val lastName: String) {
 
     @Version
     @JsonIgnore
     val version: String? = null
-
-    companion object {
-        fun new(id: String = UUID.randomUUID().toString(), firstName: String, lastName: String): User = User(id, firstName, lastName)
-    }
 
 }
 
